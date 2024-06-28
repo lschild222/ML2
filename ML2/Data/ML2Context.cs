@@ -14,6 +14,10 @@ namespace ML2.Data
         {
         }
 
-        public DbSet<ML2.Model.Customer> Customer { get; set; } = default!;
+        public DbSet<Customer> Customer { get; set; } = default!;
+        public DbSet<Item> Items { get; set; } = default!;
+        public DbSet<ML2.Model.Employee> Employees { get; set; } = default!;
+        public DbSet<ML2.Model.Orders> Orders { get; set; } = default!;
+        public DbSet<ML2.Model.Orderline> Orderline { get; set; } = default!;
     }
 }

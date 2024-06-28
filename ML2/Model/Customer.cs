@@ -17,4 +17,6 @@ public class Customer {
     [Column(TypeName = "bit")]
     public bool Active { get; set; }
 
+
+
 }
