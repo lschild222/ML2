@@ -8,34 +8,28 @@ using Microsoft.EntityFrameworkCore;
 using ML2.Data;
 using ML2.Model;
 
-namespace ML2.Controllers
-{
+namespace ML2.Controllers {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeesController : ControllerBase
-    {
+    public class EmployeesController : ControllerBase {
         private readonly ML2Context _context;
 
-        public EmployeesController(ML2Context context)
-        {
+        public EmployeesController(ML2Context context) {
             _context = context;
         }
 
         // GET: api/Employees
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployee()
-        {
+        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployee() {
             return await _context.Employees.ToListAsync();
         }
 
         // GET: api/Employees/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Employee>> GetEmployee(int id)
-        {
+        public async Task<ActionResult<Employee>> GetEmployee(int id) {
             var employee = await _context.Employees.FindAsync(id);
 
-            if (employee == null)
-            {
+            if (employee == null) {
                 return NotFound();
             }
 
@@ -45,27 +39,19 @@ namespace ML2.Controllers
         // PUT: api/Employees/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEmployee(int id, Employee employee)
-        {
-            if (id != employee.Id)
-            {
+        public async Task<IActionResult> PutEmployee(int id, Employee employee) {
+            if (id != employee.Id) {
                 return BadRequest();
             }
 
             _context.Entry(employee).State = EntityState.Modified;
 
-            try
-            {
+            try {
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!EmployeeExists(id))
-                {
+            } catch (DbUpdateConcurrencyException) {
+                if (!EmployeeExists(id)) {
                     return NotFound();
-                }
-                else
-                {
+                } else {
                     throw;
                 }
             }
@@ -76,8 +62,7 @@ namespace ML2.Controllers
         // POST: api/Employees
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Employee>> PostEmployee(Employee employee)
-        {
+        public async Task<ActionResult<Employee>> PostEmployee(Employee employee) {
             _context.Employees.Add(employee);
             await _context.SaveChangesAsync();
 
@@ -86,11 +71,9 @@ namespace ML2.Controllers
 
         // DELETE: api/Employees/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEmployee(int id)
-        {
+        public async Task<IActionResult> DeleteEmployee(int id) {
             var employee = await _context.Employees.FindAsync(id);
-            if (employee == null)
-            {
+            if (employee == null) {
                 return NotFound();
             }
 
@@ -100,9 +83,24 @@ namespace ML2.Controllers
             return NoContent();
         }
 
-        private bool EmployeeExists(int id)
-        {
+        private bool EmployeeExists(int id) {
             return _context.Employees.Any(e => e.Id == id);
+        }
+        
+
+        [HttpGet("{username}/{password}")]
+        
+        public async Task<ActionResult<Employee>> Login(string username, string password) {
+
+            var x = await (from e in _context.Employees
+                    where e.Email == username && e.Password == password
+                    select e).SingleAsync();
+            if (x == null) {
+                return NotFound();
+            }
+            return x;
+
+            //review this with Sarah
         }
     }
 }
